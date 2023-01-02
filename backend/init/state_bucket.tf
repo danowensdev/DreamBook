@@ -30,17 +30,11 @@ resource "google_service_account" "terraform" {
   project      = google_project.project.project_id
 }
 
-data "google_iam_policy" "admin" {
-  binding {
-    role = "roles/storage.admin"
-    members = concat(local.admin_users,
-    ["serviceAccount:${google_service_account.terraform.email}"])
-  }
-}
-
-resource "google_storage_bucket_iam_policy" "policy" {
+resource "google_storage_bucket_iam_member" "storage_admin" {
   bucket = google_storage_bucket.state.name
-  policy_data = data.google_iam_policy.admin.policy_data
+  role   = "roles/storage.admin"
+  for_each = toset(concat(local.admin_users, ["serviceAccount:${google_service_account.terraform.email}"]))
+  member = each.value
 }
 
 output "state_bucket" {

@@ -4,6 +4,7 @@ resource "random_integer" "default" {
 }
 
 locals {
+  state_bucket = "danowensdev-state-1-bucket"
   billing_account = "01F21A-6DB229-1099DA"
   service         = "dreambook"
   project_name    = "dreambook-${random_integer.default.result}"

@@ -49,6 +49,13 @@ resource "google_project_iam_member" "example" {
   member = "serviceAccount:${google_service_account.release_creation.email}"
 }
 
+# Give the release creation SA permission to access the Terraform state bucket
+resource "google_storage_bucket_iam_member" "state_bucket_write_access" {
+  bucket = local.state_bucket
+  role   = "roles/storage.admin"
+  member = "serviceAccount:${google_service_account.release_creation.email}"
+}
+
 resource "google_project_iam_member" "global_viewer" {
   project   = google_project.project.project_id
   role   = "roles/viewer"

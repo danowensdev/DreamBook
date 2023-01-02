@@ -8,18 +8,12 @@ locals {
   root_dir  = abspath("../cloud_function")
 }
 
-resource "null_resource" "compile_source" {
-  triggers = {
-    always_run = timestamp()
-  }
-}
 
 # Generates an archive of the source code compressed as a .zip file.
 data "archive_file" "source" {
   type        = "zip"
   source_dir  = local.root_dir
-  output_path = "/tmp/function-${local.timestamp}.zip"
-  depends_on  = [null_resource.compile_source]
+  output_path = "/tmp/function.zip"
 }
 
 # Add source code zip to the Cloud Function's bucket
