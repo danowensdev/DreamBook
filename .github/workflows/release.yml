@@ -39,7 +39,7 @@ jobs:
             --quiet \
             --gcs-log-dir="gs://$CLOUD_BUILD_BUCKET/logs"  \
             --gcs-source-staging-dir="gs://$CLOUD_BUILD_BUCKET/stage" \
-            --tag="gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
+            --tag="eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
             --project="$PROJECT_ID"
 
   build_and_deploy_frontend:
