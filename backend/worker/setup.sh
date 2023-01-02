@@ -1,3 +1,5 @@
+sudo /opt/deeplearning/install-driver.sh
+
 git clone https://github.com/CompVis/stable-diffusion.git
 cd stable-diffusion
 conda env create -f environment.yaml

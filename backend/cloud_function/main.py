@@ -1,14 +1,15 @@
 from flask import Flask, make_response
 from google.cloud import pubsub_v1
 
+project_id: str = "dreambook-713"
+topic_id: str = "open-job-topic"
+
 app = Flask(__name__)
 
 @app.route('/')
 def request_handler(request):
     publisher = pubsub_v1.PublisherClient()
 
-    project_id: str = "dreambook-713"
-    topic_id: str = "open-job-topic"
 
     topic_path = publisher.topic_path(project_id, topic_id)
 

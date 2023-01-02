@@ -1,0 +1,6 @@
+google-cloud-pubsub
+diffusers
+torch
+transformers
+accelerate
+google-cloud-secret-manager
