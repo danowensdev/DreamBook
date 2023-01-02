@@ -7,7 +7,5 @@ COPY "environment.yml" "stable-diffusion/environment.yaml"
 
 RUN cd stable-diffusion && conda env create -f environment.yaml
 
-
-
-
+RUN echo "Starting container!" > "~/log.txt"
 ENTRYPOINT ["conda" ,"run", "--no-capture-output", "-n", "ldm", "python3", "./stable-diffusion/server.py"]

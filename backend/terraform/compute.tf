@@ -45,20 +45,19 @@ module "gce-container" {
   container = {
     image = var.worker_image_uri
     tty: var.activate_tty // Allows starting interactive shell in the container
+    stdin: var.activate_tty
   }
   restart_policy = "Always" // TODO: Check
 }
 
 resource "google_compute_instance_template" "dreambook" {
-  name_prefix          = "dreambook-template"
+  name_prefix          = "dreambook-${substr(var.worker_image_tag, 0, 5)}-"
   description          = "This template is used to create dreambook backend instances."
   instance_description = "Dreambook backend instance"
   project              = google_project.project.project_id
 
   machine_type         = "custom-2-13312"
   
-  // allow_stopping_for_update = true // TODO: Check if this stops workers during work
-
   can_ip_forward       = false
 
   scheduling {
@@ -85,6 +84,7 @@ resource "google_compute_instance_template" "dreambook" {
 
   metadata = {
     gce-container-declaration = module.gce-container.metadata_value
+    google_logging_enabled = "true"
   }
   labels = {
     container-vm = module.gce-container.vm_container_label
