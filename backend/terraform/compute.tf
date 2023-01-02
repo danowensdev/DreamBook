@@ -116,7 +116,13 @@ resource "google_compute_autoscaler" "foobar" {
       filter = "resource.type=\"pubsub_subscription\" AND resource.label.subscription_id=\"open-job-subscription\""
       single_instance_assignment = 1  # Each VM can only handle one job at a time
     }
-
+    scale_down_control {
+      time_window_sec = 60
+      max_scaled_down_replicas {
+        fixed = 10
+      }
+    }
+    
     // TODO: autoscaling metric
   }
 }
