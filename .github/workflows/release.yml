@@ -4,28 +4,59 @@ on:
     branches:
       - main
 
+env:
+  PROJECT_ID: dreambook-713
+  SERVICE_NAME: dreambook
+  CLOUD_BUILD_BUCKET: dreambook-713-cloud-build
+
+permissions:
+  id-token: write # Make GitHub populate environment variables for OIDC with GCP
+  contents: write # Get access to  repository
+
 jobs:
   build_deploy_backend:
     runs-on: ubuntu-latest
-  steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - id: auth
-      name: "Authenticate to Google Cloud"
-      uses: "google-github-actions/auth@v1"
-      with:
-        workload_identity_provider: "projects/14923174484/locations/global/workloadIdentityPools/dreambook-pool/providers/dreambook-gh-provider"
-        service_account:
+
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+      - id: auth
+        name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          workload_identity_provider: "projects/14923174484/locations/global/workloadIdentityPools/dreambook-pool/providers/dreambook-gh-provider"
+          service_account: "${{ secrets.RUN_SA_EMAIL }}"
+
+      # Setup gcloud CLI
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      # Build and push image to Google Container Registry
+      - name: Build
+        working-directory: backend/worker
+        run: |-
+          gcloud builds submit \
+            --quiet \
+            --gcs-log-dir="gs://$CLOUD_BUILD_BUCKET/logs"  \
+            --gcs-source-staging-dir="gs://$CLOUD_BUILD_BUCKET/stage" \
+            --tag="gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
+            --project="$PROJECT_ID"
+
   build_and_deploy_frontend:
     runs-on: ubuntu-latest
     steps:
       - name: "Checkout"
         uses: actions/checkout@v3
+      - name: Install packages
+        working-directory: frontend
+        run: npm install
       - name: "Build and deploy frontend"
-        run: cd frontend && npm run check && npm run deploy
+        working-directory: frontend
+        run: npm run check && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
           firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DREAMBOOK_713 }}"
           channelId: live
+          entryPoint: frontend
           projectId: dreambook-713
