@@ -35,7 +35,6 @@ jobs:
       - name: Build
         working-directory: ./backend/worker
         run: |-
-          pwd && ls && \
           gcloud builds submit \
             --quiet \
             --gcs-log-dir="gs://$CLOUD_BUILD_BUCKET/logs" \
