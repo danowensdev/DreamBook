@@ -11,6 +11,7 @@ locals {
   zone            = "europe-west4-a"
 
   services_to_enable = [
+    "firestore.googleapis.com",
     "cloudbuild.googleapis.com",
     "run.googleapis.com",
     "artifactregistry.googleapis.com",

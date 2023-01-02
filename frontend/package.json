@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "check": "svelte-check --tsconfig ./tsconfig.json"
+    "check": "svelte-check --tsconfig ./tsconfig.json",
+    "deploy": "vite build && firebase deploy"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^1.1.0",
@@ -21,5 +22,8 @@
     "tslib": "^2.4.0",
     "typescript": "^4.6.4",
     "vite": "^3.2.3"
+  },
+  "dependencies": {
+    "firebase": "^9.15.0"
   }
 }

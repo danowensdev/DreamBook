@@ -10,4 +10,4 @@ RUN cd stable-diffusion && conda env create -f environment.yaml
 
 
 
-ENTRYPOINT ["conda" "run" "--no-capture-output" "-n" "ldm" "python3", "./server.py"]
+ENTRYPOINT ["conda" ,"run", "--no-capture-output", "-n", "ldm", "python3", "./stable-diffusion/server.py"]
