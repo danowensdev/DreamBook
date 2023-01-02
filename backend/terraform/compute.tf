@@ -39,13 +39,26 @@ module "cloud-nat" {
   source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
 }
 
+module "gce-container" {
+  source = "terraform-google-modules/container-vm/google"
+  version = "~> 2.0"
+  container = {
+    image = var.worker_image_uri
+    tty: var.activate_tty // Allows starting interactive shell in the container
+  }
+  restart_policy = "Always" // TODO: Check
+}
+
 resource "google_compute_instance_template" "dreambook" {
-  name_prefix                 = "dreambook-template"
+  name_prefix          = "dreambook-template"
   description          = "This template is used to create dreambook backend instances."
   instance_description = "Dreambook backend instance"
   project              = google_project.project.project_id
 
   machine_type         = "custom-2-13312"
+  
+  // allow_stopping_for_update = true // TODO: Check if this stops workers during work
+
   can_ip_forward       = false
 
   scheduling {
@@ -63,19 +76,25 @@ resource "google_compute_instance_template" "dreambook" {
   // Create a new boot disk from an image
   disk {
     #source_image      = "projects/ml-images/global/images/family/common-dl-gpu-debian-10"
-    source_image      = "projects/${google_project.project.project_id}/global/images/family/${local.image_family}"
+    source_image      = module.gce-container.source_image
     
     auto_delete       = true
     boot              = true
     // TODO: Backup
   }
 
+  metadata = {
+    gce-container-declaration = module.gce-container.metadata_value
+  }
+  labels = {
+    container-vm = module.gce-container.vm_container_label
+  }
+
   network_interface {
     network = google_compute_network.dreambook.name
     subnetwork = google_compute_subnetwork.dreambook.name
   }
-
-  service_account {
+  service_account { // TODO
     scopes = ["cloud-platform"]
   }
   lifecycle {
@@ -99,7 +118,10 @@ resource "google_compute_instance_group_manager" "dreambook" {
 
   target_pools = [google_compute_target_pool.dreambook.id]
 
-  // TODO: Autohealing
+  // Rolling updates on terraform apply # https://stackoverflow.com/a/74914276/5183812
+  lifecycle {
+    create_before_destroy = true
+  }
 }
 
 resource "google_compute_autoscaler" "foobar" {
