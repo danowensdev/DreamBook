@@ -1,5 +1,46 @@
+locals {
+  image_family = "dreambook-stable-diffusion-test"
+}
+
+resource "google_compute_network" "dreambook" {
+  name = "dreambook-network"
+}
+resource "google_compute_subnetwork" "dreambook" {
+  name          = "dreambook-subnetwork"
+  ip_cidr_range = "10.0.0.0/16"
+  network       = google_compute_network.dreambook.self_link
+  region        = local.region
+}
+
+resource "google_compute_firewall" "dreambook" {
+  name    = "allow-ssh"
+  network = google_compute_network.dreambook.name
+
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
+  }
+
+  source_ranges = ["35.235.240.0/20"] # Google Cloud https://cloud.google.com/nat/docs/gce-example
+}
+resource "google_compute_router" "dreambook" {
+  name    = "dreambook-router"
+  network = google_compute_network.dreambook.name
+  region  = local.region
+}
+module "cloud-nat" {
+  source  = "terraform-google-modules/cloud-nat/google"
+  version = "~> 2.0"
+
+  project_id = google_project.project.project_id
+  region     = local.region
+  router     = google_compute_router.dreambook.name
+  name   = "dreambook-nat"
+  source_subnetwork_ip_ranges_to_nat = "ALL_SUBNETWORKS_ALL_IP_RANGES"
+}
+
 resource "google_compute_instance_template" "dreambook" {
-  name                 = "dreambook-template"
+  name_prefix                 = "dreambook-template"
   description          = "This template is used to create dreambook backend instances."
   instance_description = "Dreambook backend instance"
   project              = google_project.project.project_id
@@ -21,7 +62,8 @@ resource "google_compute_instance_template" "dreambook" {
 
   // Create a new boot disk from an image
   disk {
-    source_image      = "projects/ml-images/global/images/family/common-dl-gpu-debian-10"
+    #source_image      = "projects/ml-images/global/images/family/common-dl-gpu-debian-10"
+    source_image      = "projects/${google_project.project.project_id}/global/images/family/${local.image_family}"
     
     auto_delete       = true
     boot              = true
@@ -29,11 +71,15 @@ resource "google_compute_instance_template" "dreambook" {
   }
 
   network_interface {
-    network = "default"
+    network = google_compute_network.dreambook.name
+    subnetwork = google_compute_subnetwork.dreambook.name
   }
 
   service_account {
     scopes = ["cloud-platform"]
+  }
+  lifecycle {
+    create_before_destroy = true # https://github.com/hashicorp/terraform-provider-google/issues/1601
   }
 }
 
@@ -60,11 +106,16 @@ resource "google_compute_autoscaler" "foobar" {
   name   = "dreambook-autoscaler"
   zone   = local.zone
   target = google_compute_instance_group_manager.dreambook.id
-
+  provider = google-beta
   autoscaling_policy {
     max_replicas    = 1
     min_replicas    = 0
     cooldown_period = 60
+    metric {
+      name   = "pubsub.googleapis.com/subscription/num_undelivered_messages"
+      filter = "resource.type=\"pubsub_subscription\" AND resource.label.subscription_id=\"open-job-subscription\""
+      single_instance_assignment = 1  # Each VM can only handle one job at a time
+    }
 
     // TODO: autoscaling metric
   }

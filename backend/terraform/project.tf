@@ -4,7 +4,6 @@ resource "google_project" "project" {
   project_id      = local.project_name
 }
 
-
 resource "google_project_service" "project" {
   project  = local.project_name
   for_each = toset(local.services_to_enable)
