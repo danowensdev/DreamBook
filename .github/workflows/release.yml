@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build_deploy_backend:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     steps:
       - name: "Checkout"
