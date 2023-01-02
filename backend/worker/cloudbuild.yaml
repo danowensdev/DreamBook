@@ -1,0 +1,12 @@
+# Use Kaniko build to cache container build artifacts by storing and indexing intermediate layers within the container image registry
+# https://cloud.google.com/build/docs/optimize-builds/speeding-up-builds
+
+steps:
+  - name: "gcr.io/kaniko-project/executor:latest"
+    env:
+      - "PROJECT_ID=$PROJECT_ID"
+      - "COMMIT_SHA=$COMMIT_SHA"
+    args:
+      - --destination=eu.gcr.io/$PROJECT_ID/dreambook:$COMMIT_SHA
+      - --cache=true
+      - --cache-ttl=24h
