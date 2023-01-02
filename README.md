@@ -16,10 +16,11 @@ Steps that need to be performed:
    - Note: A number of applies may be needed, as Google Cloud APIs are enabled asynchronously.
 2. Run `terraform init` and `terraform apply` in `/backend/terraform` to create the rest of the infrastructure.
 3. Using the [Firebase CLI](https://firebase.google.com/docs/cli), run `firebase init` in `/frontend` to set up a Firebase project.
-4. In the [Firebase GUI](https://console.firebase.google.com/), enable the following services for the project:
+4. In the [Firebase Console](https://console.firebase.google.com/), enable the following services for the project:
    - Authentication
    - Cloud Firestore
    - Hosting
+5. Enable Google as a sign-in provider in the Firebase Consol.
 
 ### Frontend
 

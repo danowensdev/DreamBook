@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   build_deploy_backend:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     steps:
       - name: "Checkout"
@@ -41,6 +41,21 @@ jobs:
             --gcs-source-staging-dir="gs://$CLOUD_BUILD_BUCKET/stage" \
             --tag="eu.gcr.io/$PROJECT_ID/$SERVICE_NAME:$GITHUB_SHA" \
             --project="$PROJECT_ID"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+        working-directory: ./backend/terraform # Use your environment folder
+        shell: bash
+
+      - name: Terraform Apply
+        id: apply
+        run: terraform apply -input=false -auto-approve
+        working-directory: ./backend/terraform # Use your environment folder
+        shell: bash
 
   build_and_deploy_frontend:
     runs-on: ubuntu-latest

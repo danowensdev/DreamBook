@@ -84,7 +84,7 @@ resource "google_compute_instance_template" "dreambook" {
 
   metadata = {
     gce-container-declaration = module.gce-container.metadata_value
-    google_logging_enabled = "true"
+    google-logging-enabled = "true"
   }
   labels = {
     container-vm = module.gce-container.vm_container_label
