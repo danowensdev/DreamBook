@@ -123,6 +123,5 @@ resource "google_compute_autoscaler" "foobar" {
       }
     }
     
-    // TODO: autoscaling metric
   }
 }
