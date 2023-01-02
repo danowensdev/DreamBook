@@ -1,0 +1,31 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_deploy_backend:
+    runs-on: ubuntu-latest
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+    - id: auth
+      name: "Authenticate to Google Cloud"
+      uses: "google-github-actions/auth@v1"
+      with:
+        workload_identity_provider: "projects/14923174484/locations/global/workloadIdentityPools/dreambook-pool/providers/dreambook-gh-provider"
+        service_account:
+  build_and_deploy_frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout"
+        uses: actions/checkout@v3
+      - name: "Build and deploy frontend"
+        run: cd frontend && npm run check && npm run deploy
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DREAMBOOK_713 }}"
+          channelId: live
+          projectId: dreambook-713
