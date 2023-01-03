@@ -49,14 +49,15 @@ jobs:
       - name: Terraform Init
         id: init
         run: terraform init
-        working-directory: ./backend/terraform # Use your environment folder
+        working-directory: ./backend/terraform
         shell: bash
 
+      # TODO: Don't duplicate worker image url
       - name: Terraform Apply
         id: apply
         run: |-
           terraform apply -input=false -auto-approve -var="worker_image_tag=$GITHUB_SHA" -var="worker_image_uri=eu.gcr.io/$PROJECT_ID/dreambook:$WORKER_IMAGE_TAG"
-        working-directory: ./backend/terraform # Use your environment folder
+        working-directory: ./backend/terraform
         shell: bash
 
   build_and_deploy_frontend:
