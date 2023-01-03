@@ -14,6 +14,7 @@ const PageContainerDiv = styled.div`
   padding: 24px;
   background-image: url(${StarrySkyBackground});
   background-size: cover;
+  background-position: center;
   background-color: ${averageBackgroundImageColor};
   height: 100vh;
   @media (max-width: 600px) {
