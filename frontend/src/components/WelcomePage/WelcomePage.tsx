@@ -13,12 +13,24 @@ import { Button } from "../Button/Button";
 import { TextField } from "../TextField/TextField";
 import { breakpoints } from "../theme";
 
+const GoogleIcon = styled(GoogleLogo)`
+  background-color: white;
+  border-radius: 50%;
+  padding: 4px;
+`;
+
 const AuthForm = styled.form`
   @media (max-width: ${breakpoints.sm}) {
     width: 100%;
     border-radius: 0px;
   }
-  background-color: white;
+
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  /* Add box-shadow for more depth */
+  box-shadow: 0px 10px 15px 10px rgba(0, 0, 0, 0.15);
+  background-color: #ff7f8026
+
   width: 364px;
   padding: 24px;
   margin: 0 auto;
@@ -39,6 +51,7 @@ export const WelcomePage: React.FC = () => {
         style={{ gridColumnStart: 1, gridColumnEnd: 3 }}
         placeholder="Email address"
         type="email"
+        spellCheck="false"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
@@ -74,7 +87,7 @@ export const WelcomePage: React.FC = () => {
         primary={false}
         onClick={() => signInWithRedirect(getAuth(), googleAuthProvider)}
       >
-        <GoogleLogo />
+        <GoogleIcon />
         <span>Continue with Google</span>
         <div style={{ width: "24px" }}></div>
       </Button>

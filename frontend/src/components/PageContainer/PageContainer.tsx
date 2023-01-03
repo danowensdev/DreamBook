@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import { LogoHeader } from "../LogoHeader/LogoHeader";
 
+import StarrySkyBackground from "../../assets/starrysky4x.jpeg";
+const averageBackgroundImageColor = "#728db8"; // Average color of StarrySkyBackground
 const PageContainerDiv = styled.div`
   display: flex;
   align-items: center;
@@ -10,7 +12,9 @@ const PageContainerDiv = styled.div`
   overflow-y: auto;
   min-width: 300px;
   padding: 24px;
-  background-color: #eeffee;
+  background-image: url(${StarrySkyBackground});
+  background-size: cover;
+  background-color: ${averageBackgroundImageColor};
   height: 100vh;
   @media (max-width: 600px) {
     width: 100%;

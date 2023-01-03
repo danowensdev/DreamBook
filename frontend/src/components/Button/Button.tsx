@@ -5,10 +5,8 @@ interface ButtonProps {
   primary: boolean;
 }
 export const Button = styled.button<ButtonProps>`
-  border-radius: 5px;
   padding: 0.25em 1em;
   height: 46px;
-  font-weight: 600;
   border-width: 0px;
   &:hover:not(:disabled):not(:active),
   &:focus {
@@ -28,15 +26,15 @@ export const Button = styled.button<ButtonProps>`
         background: ${theme.disabled};
       }
       background: ${theme.main};
-      color: white;
+      color: #222222;
     `};
   ${(props) =>
     !props.primary &&
     css`
       &:disabled {
-        border: 2px solid ${theme.disabled};
+        border: none;
       }
-      border: 2px solid ${theme.main};
+      border: none;
       background: transparent;
       color: ${theme.main};
     `};
