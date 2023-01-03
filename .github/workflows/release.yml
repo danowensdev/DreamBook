@@ -8,7 +8,7 @@ env:
   PROJECT_ID: dreambook-713
   SERVICE_NAME: dreambook
   CLOUD_BUILD_BUCKET: dreambook-713-cloud-build
-  REGION: europe-west4
+  BUILD_REGION: europe-west1 # Not possible in europe-west4 https://cloud.google.com/build/docs/locations#restricted_regions_for_some_projects
 
 permissions:
   id-token: write # Make GitHub populate environment variables for OIDC with GCP
@@ -43,7 +43,7 @@ jobs:
             --project="$PROJECT_ID" \
             --config="./cloudbuild.yaml" \
             --substitutions=COMMIT_SHA="$GITHUB_SHA" \
-            --region="$REGION"
+            --region="$BUILD_REGION"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
