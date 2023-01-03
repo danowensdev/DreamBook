@@ -17,6 +17,7 @@ const GoogleIcon = styled(GoogleLogo)`
   background-color: white;
   border-radius: 50%;
   padding: 4px;
+  flex-shrink: 0;
 `;
 
 const AuthForm = styled.form`
@@ -38,6 +39,18 @@ const AuthForm = styled.form`
   display: grid;
   grid-gap: 16px;
   grid-template-columns: 1fr 1fr;
+`;
+
+const AuthProviderButton = styled(Button)`
+  grid-column-start: 1;
+
+  grid-column-end: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @media (max-width: ${breakpoints.sm}) {
+    padding: 0px;
+  }
 `;
 
 export const WelcomePage: React.FC = () => {
@@ -76,21 +89,20 @@ export const WelcomePage: React.FC = () => {
       >
         Sign up
       </Button>
-      <Button
-        style={{
-          gridColumnStart: 1,
-          gridColumnEnd: 3,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
+      <AuthProviderButton
         primary={false}
         onClick={() => signInWithRedirect(getAuth(), googleAuthProvider)}
       >
         <GoogleIcon />
-        <span>Continue with Google</span>
+        <span
+          style={{
+            padding: "0px 16px",
+          }}
+        >
+          Continue with Google
+        </span>
         <div style={{ width: "24px" }}></div>
-      </Button>
+      </AuthProviderButton>
     </AuthForm>
   );
 };

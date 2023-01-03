@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { LogoHeader } from "../LogoHeader/LogoHeader";
 
 import StarrySkyBackground from "../../assets/starrysky4x.jpeg";
+import { breakpoints } from "../theme";
 const averageBackgroundImageColor = "#728db8"; // Average color of StarrySkyBackground
 const PageContainerDiv = styled.div`
   display: flex;
@@ -17,7 +18,7 @@ const PageContainerDiv = styled.div`
   background-position: center;
   background-color: ${averageBackgroundImageColor};
   height: 100vh;
-  @media (max-width: 600px) {
+  @media (max-width: ${breakpoints.sm}) {
     width: 100%;
     padding: 24px 0px;
   }

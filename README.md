@@ -20,7 +20,7 @@ Steps that need to be performed:
    - Authentication
    - Cloud Firestore
    - Hosting
-5. Enable Google as a sign-in provider in the Firebase Consol.
+5. Enable Google as a sign-in provider in the Firebase Console. Add desired domains to Authorized Domains.
 
 ### Frontend
 
