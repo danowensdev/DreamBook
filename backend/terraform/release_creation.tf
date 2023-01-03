@@ -37,6 +37,15 @@ resource "google_storage_bucket_iam_binding" "cloud_build_bucket" {
   members = ["serviceAccount:${google_service_account.release_creation.email}"]
 }
 
+data "google_compute_default_service_account" "default" {}
+
+# Allow release creation SA to use the default GCE account
+resource "google_service_account_iam_member" "gce-default-account-iam" {
+  service_account_id = data.google_compute_default_service_account.default.name
+  role               = "roles/iam.serviceAccountUser"
+  member             = "serviceAccount:${google_service_account.release_creation.email}"
+}
+
 # Access huggingface secret password (TODO: Do we need this?)
 resource "google_secret_manager_secret_iam_member" "pw_member" {
   project   = google_secret_manager_secret.huggingface-cli-pw.project
