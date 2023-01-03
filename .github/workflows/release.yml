@@ -8,6 +8,7 @@ env:
   PROJECT_ID: dreambook-713
   SERVICE_NAME: dreambook
   CLOUD_BUILD_BUCKET: dreambook-713-cloud-build
+  REGION: europe-west4
 
 permissions:
   id-token: write # Make GitHub populate environment variables for OIDC with GCP
@@ -41,7 +42,8 @@ jobs:
             --gcs-source-staging-dir="gs://$CLOUD_BUILD_BUCKET/stage" \
             --project="$PROJECT_ID" \
             --config="./cloudbuild.yaml" \
-            --substitutions=COMMIT_SHA="$GITHUB_SHA"
+            --substitutions=COMMIT_SHA="$GITHUB_SHA" \
+            --region="$REGION"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
