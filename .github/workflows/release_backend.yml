@@ -1,12 +1,13 @@
-name: Release
+name: Release backend
 on:
   push:
     branches:
       - main
+    paths:
+      - backend/worker/**
 
 env:
   PROJECT_ID: dreambook-713
-  SERVICE_NAME: dreambook
   CLOUD_BUILD_BUCKET: dreambook-713-cloud-build
   BUILD_REGION: europe-west1 # Not possible in europe-west4 https://cloud.google.com/build/docs/locations#restricted_regions_for_some_projects
 
@@ -58,25 +59,6 @@ jobs:
       - name: Terraform Apply
         id: apply
         run: |-
-          terraform apply -input=false -auto-approve -var="worker_image_tag=$GITHUB_SHA" -var="worker_image_uri=eu.gcr.io/$PROJECT_ID/dreambook:$WORKER_IMAGE_TAG"
+          terraform apply -input=false -auto-approve -var="worker_image_tag=$GITHUB_SHA" -var="worker_image_uri=eu.gcr.io/$PROJECT_ID/dreambook:$GITHUB_SHA"
         working-directory: ./backend/terraform
         shell: bash
-
-  build_and_deploy_frontend:
-    runs-on: ubuntu-latest
-    steps:
-      - name: "Checkout"
-        uses: actions/checkout@v3
-      - name: Install packages
-        working-directory: frontend
-        run: npm install
-      - name: "Build and deploy frontend"
-        working-directory: frontend
-        run: npm run build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_DREAMBOOK_713 }}"
-          channelId: live
-          entryPoint: frontend
-          projectId: dreambook-713

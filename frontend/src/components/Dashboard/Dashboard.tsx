@@ -7,21 +7,6 @@ import { Button } from "../Button/Button";
 import { breakpoints } from "../theme";
 import { TextField } from "../TextField/TextField";
 
-const Page = styled.div`
-  @media (max-width: ${breakpoints.sm}) {
-    width: 100%;
-    border-radius: 0px;
-  }
-  display: flex;
-  gap: 16px;
-  flex-direction: column;
-  background-color: white;
-  width: 500px;
-  padding: 24px;
-  margin: 0 auto;
-  border-radius: 5px;
-`;
-
 const cloudFunctionUrl =
   "https://dreambook-request-handler3-rict3hrzrq-ez.a.run.app";
 
@@ -48,6 +33,15 @@ async function submitPrompt(prompt: string, user: User) {
   return response.json();
 }
 
+const FlowPage = styled.div`
+  display: flex;
+  gap: 16px;
+  flex-direction: column;
+  padding: 24px;
+  margin: 0 auto;
+  border-radius: 5px;
+`;
+
 export const Dashboard: React.FC = () => {
   const { user } = useAuth();
 
@@ -58,14 +52,18 @@ export const Dashboard: React.FC = () => {
   const [prompt, setPrompt] = React.useState<string>("");
 
   return (
-    <Page>
-      <TextField value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+    <FlowPage>
+      <TextField
+        placeholder={"Prompt"}
+        value={prompt}
+        onChange={(e) => setPrompt(e.target.value)}
+      />
       <Button primary={true} onClick={() => submitPrompt(prompt, user)}>
         Submit prompt
       </Button>
       <Button primary={false} onClick={() => signOut(getAuth())}>
         Sign out
       </Button>
-    </Page>
+    </FlowPage>
   );
 };

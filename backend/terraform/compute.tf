@@ -44,8 +44,8 @@ module "gce-container" {
   version = "~> 2.0"
   container = {
     image = var.worker_image_uri
-    tty: var.activate_tty // Allows starting interactive shell in the container
-    stdin: var.activate_tty
+    tty: true // Allows starting interactive shell in the container
+    stdin: true
   }
   restart_policy = "Always" // TODO: Check
 }

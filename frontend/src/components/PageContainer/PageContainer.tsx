@@ -24,11 +24,27 @@ const PageContainerDiv = styled.div`
   }
 `;
 
+const PageDiv = styled.div`
+  @media (max-width: ${breakpoints.sm}) {
+    width: 100%;
+    border-radius: 0px;
+  }
+
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  box-shadow: 0px 10px 15px 10px rgba(0, 0, 0, 0.15);
+  background-color: #ff7f8026
+
+  width: 364px;
+  padding: 24px;
+  margin: 0 auto;
+  border-radius: 5px;`;
+
 export const PageContainer: React.FC = ({ children }) => {
   return (
     <PageContainerDiv>
       <LogoHeader />
-      {children}
+      <PageDiv>{children}</PageDiv>
     </PageContainerDiv>
   );
 };

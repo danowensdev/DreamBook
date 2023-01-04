@@ -55,6 +55,13 @@ resource "google_cloudfunctions2_function" "request_handler" {
     }
 }
 
+resource "google_cloud_run_service_iam_member" "invoker_all_users" {
+  location = google_cloudfunctions2_function.request_handler.location
+  service  = google_cloudfunctions2_function.request_handler.name
+  role     = "roles/run.invoker"
+  member   = "allUsers"
+}
+
 output "function_uri" {
       value = google_cloudfunctions2_function.request_handler.service_config[0].uri
 }

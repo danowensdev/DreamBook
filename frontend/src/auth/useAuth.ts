@@ -13,7 +13,7 @@ function useAuth() {
     User | null,
     Error
   >(() => getAuth().currentUser);
-  console.log(error, loading, value);
+
   const auth = getAuth();
 
   useEffect(() => {
