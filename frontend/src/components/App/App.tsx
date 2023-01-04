@@ -1,6 +1,6 @@
 import { Navigate, Route, Routes } from "react-router-dom";
 import { useAuth } from "../../auth/useAuth";
-import { Dashboard } from "../Dashboard/Dashboard";
+import { Dashboard } from "../Flow/Flow";
 import { Loading } from "../Loading/Loading";
 import { PageContainer } from "../PageContainer/PageContainer";
 import { WelcomePage } from "../WelcomePage/WelcomePage";

@@ -1,6 +1,8 @@
-google-cloud-pubsub
 diffusers
 torch
 transformers
 accelerate
 google-cloud-secret-manager
+google-cloud-storage
+google-cloud-pubsub
+firebase-admin

@@ -147,3 +147,6 @@ resource "google_compute_autoscaler" "foobar" {
     
   }
 }
+output "image_uri" {
+  value = var.worker_image_uri
+}
