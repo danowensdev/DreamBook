@@ -6,6 +6,6 @@ COPY "environment.yml" "stable-diffusion/environment.yaml"
 
 RUN cd stable-diffusion && conda env create -f environment.yaml
 
-COPY "server.py" "stable-diffusion/server.py"
+COPY "src" "./src"
 
-ENTRYPOINT ["conda" ,"run", "--no-capture-output", "-n", "ldm", "python3", "./stable-diffusion/server.py"]
+ENTRYPOINT ["conda" ,"run", "--no-capture-output", "-n", "ldm", "python3", "./src/server.py"]
