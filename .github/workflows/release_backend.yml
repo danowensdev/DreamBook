@@ -59,6 +59,6 @@ jobs:
       - name: Terraform Apply
         id: apply
         run: |-
-          terraform apply -input=false -auto-approve -var="worker_image_tag=$GITHUB_SHA" -var="worker_image_uri=eu.gcr.io/$PROJECT_ID/dreambook:$GITHUB_SHA"
+          terraform apply -input=false -auto-approve -var="worker_image_tag=$GITHUB_SHA"
         working-directory: ./backend/terraform
         shell: bash
