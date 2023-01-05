@@ -1,4 +1,4 @@
-resource "google_project_iam_binding" "project" {
+resource "google_project_iam_member" "project" {
   for_each = toset([
     "owner",
     "cloudbuild.builds.builder",
@@ -14,5 +14,5 @@ resource "google_project_iam_binding" "project" {
   project = google_project.project.project_id
   role   = "roles/${each.value}"
 
-  members = local.admin_users
+  member = local.admin_user
 }

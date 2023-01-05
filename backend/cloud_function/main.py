@@ -1,6 +1,7 @@
 from flask import Flask, make_response, Request
 from google.cloud import pubsub_v1
 from firebase_admin import auth, initialize_app as initialize_firebase_app
+import json
 
 project_id: str = "dreambook-713"
 topic_id: str = "open-job-topic"
@@ -42,8 +43,8 @@ def request_handler(request: Request):
 
     topic_path = publisher.topic_path(project_id, topic_id)
 
-    future = publisher.publish(topic_path, prompt, user_id=user_id)
+    future = publisher.publish(topic_path, prompt.encode('utf-8'), user_id=user_id)
 
     print("Published message")
     
-    return make_response('Message published', 200, headers)
+    return make_response("{}", 200, headers)

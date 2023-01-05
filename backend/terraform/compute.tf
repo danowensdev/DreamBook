@@ -43,7 +43,7 @@ module "gce-container" {
   source = "terraform-google-modules/container-vm/google"
   version = "~> 2.0"
   container = {
-    image = var.worker_image_uri
+    image = "eu.gcr.io/${var.project_id}/${var.service_name}:${var.worker_image_tag}"
     tty: true // Allows starting interactive shell in the container
     stdin: true
   }
@@ -147,6 +147,6 @@ resource "google_compute_autoscaler" "foobar" {
     
   }
 }
-output "image_uri" {
-  value = var.worker_image_uri
+output "image_tag" {
+  value = var.worker_image_tag
 }

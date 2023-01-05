@@ -24,18 +24,13 @@ resource "google_storage_bucket" "state" {
   ]
 }
 
-resource "google_service_account" "terraform" {
-  account_id   = "terraform"
-  display_name = "Terraform"
-  project      = google_project.project.project_id
-}
 
 resource "google_storage_bucket_iam_member" "storage_admin" {
   bucket = google_storage_bucket.state.name
   role   = "roles/storage.admin"
-  for_each = toset(concat(local.admin_users, ["serviceAccount:${google_service_account.terraform.email}"]))
-  member = each.value
+  member = local.admin_user
 }
+
 
 output "state_bucket" {
   value = google_storage_bucket.state.name

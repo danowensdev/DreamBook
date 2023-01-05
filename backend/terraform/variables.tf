@@ -1,6 +1,10 @@
 variable "worker_image_tag" {
   type = string
 }
-variable "worker_image_uri" {
+
+variable "project_id" {
+  type = string
+}
+variable "service_name" {
   type = string
 }

@@ -1,6 +1,7 @@
 import { User, getAuth, signOut } from "firebase/auth";
 import React from "react";
 import styled from "styled-components";
+import { v4 as uuidv4 } from "uuid";
 
 import { useAuth } from "../../auth/useAuth";
 import { Button } from "../Button/Button";
@@ -10,7 +11,7 @@ import { TextField } from "../TextField/TextField";
 const cloudFunctionUrl =
   "https://dreambook-request-handler3-rict3hrzrq-ez.a.run.app";
 
-async function submitPrompt(prompt: string, user: User) {
+async function submitPrompt(prompt: string, user: User, request_id: string) {
   const token = await user.getIdToken();
 
   const response = await fetch(cloudFunctionUrl, {
@@ -21,6 +22,7 @@ async function submitPrompt(prompt: string, user: User) {
     },
     body: JSON.stringify({
       prompt,
+      request_id,
     }),
   });
 
@@ -58,7 +60,10 @@ export const Dashboard: React.FC = () => {
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
       />
-      <Button primary={true} onClick={() => submitPrompt(prompt, user)}>
+      <Button
+        primary={true}
+        onClick={() => submitPrompt(prompt, user, uuidv4())}
+      >
         Submit prompt
       </Button>
       <Button primary={false} onClick={() => signOut(getAuth())}>

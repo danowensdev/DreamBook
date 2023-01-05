@@ -8,7 +8,5 @@ locals {
     "storage.googleapis.com",
   ]
 
-  admin_users = [
-    "user:danowens878@gmail.com"
-  ]
+  admin_user = "user:danowens878@gmail.com"
 }

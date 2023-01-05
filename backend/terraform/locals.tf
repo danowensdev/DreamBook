@@ -6,12 +6,12 @@ resource "random_integer" "default" {
 locals {
   state_bucket = "danowensdev-state-1-bucket"
   billing_account = "01F21A-6DB229-1099DA"
-  service         = "dreambook"
   project_name    = "dreambook-${random_integer.default.result}"
   region          = "europe-west4"
   zone            = "europe-west4-a"
 
   services_to_enable = [
+    "firebasestorage.googleapis.com",
     "firestore.googleapis.com",
     "cloudbuild.googleapis.com",
     "run.googleapis.com",
@@ -23,5 +23,8 @@ locals {
     "storage.googleapis.com",
     "iam.googleapis.com",
     "cloudresourcemanager.googleapis.com"
+  ]
+  admin_users = [
+    "user:danowens878@gmail.com"
   ]
 }

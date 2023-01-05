@@ -15,6 +15,10 @@ Steps that need to be performed:
 1. Run `terraform init` and `terraform apply` in `/backend/init` to create the Terraform state bucket.
    - Note: A number of applies may be needed, as Google Cloud APIs are enabled asynchronously.
 2. Run `terraform init` and `terraform apply` in `/backend/terraform` to create the rest of the infrastructure.
+   - Note: The service account `terraform-applier` must be used for Firebase Auth resources, but it has limited access for security.
+     The service account must be created first along with the rest of the resources by an admin user using `terraform apply`.
+   - `terraform apply` takes `worker_image_tag` as an input, which is the tag of the Docker image to deploy to the worker agent.
+     The image must be built and pushed to the Google Container Registry first.
 3. Using the [Firebase CLI](https://firebase.google.com/docs/cli), run `firebase init` in `/frontend` to set up a Firebase project.
 4. In the [Firebase Console](https://console.firebase.google.com/), enable the following services for the project:
    - Authentication

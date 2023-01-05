@@ -75,6 +75,7 @@ pipe = StableDiffusionPipeline.from_pretrained(
     use_auth_token=huggingface_token
 ).to("cuda")
 
+
 def run_inference(prompt):
     print("Running inference with prompt:", prompt)
     with autocast("cuda"):
