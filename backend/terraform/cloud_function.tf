@@ -3,6 +3,7 @@ resource "google_storage_bucket" "function_bucket" {
   name     = "dreambook-cloud-function-bucket"
   location = local.region
 }
+
 locals {
   timestamp = formatdate("YYMMDDhhmmss", timestamp())
   root_dir  = abspath("../cloud_function")
@@ -34,25 +35,25 @@ resource "google_storage_bucket_object" "archive" {
 }
 
 resource "google_cloudfunctions2_function" "request_handler" {
-    name = "dreambook-request-handler3"
-    location = local.region
-    description = "Request handler"
+  name        = "dreambook-request-handler3"
+  location    = local.region
+  description = "Request handler"
 
-    build_config {
-        entry_point = "request_handler"
-        runtime = "python39"
-        source {
-            storage_source {
-                bucket = google_storage_bucket.function_bucket.name
-                object = google_storage_bucket_object.archive.name
-            }
-        }
+  build_config {
+    entry_point = "request_handler"
+    runtime     = "python39"
+    source {
+      storage_source {
+        bucket = google_storage_bucket.function_bucket.name
+        object = google_storage_bucket_object.archive.name
+      }
     }
-    service_config {
-        max_instance_count = 2
-        available_memory = "256M"
-        timeout_seconds = 60
-    }
+  }
+  service_config {
+    max_instance_count = 2
+    available_memory   = "256M"
+    timeout_seconds    = 60
+  }
 }
 
 resource "google_cloud_run_service_iam_member" "invoker_all_users" {
@@ -63,5 +64,5 @@ resource "google_cloud_run_service_iam_member" "invoker_all_users" {
 }
 
 output "function_uri" {
-      value = google_cloudfunctions2_function.request_handler.service_config[0].uri
+  value = google_cloudfunctions2_function.request_handler.service_config[0].uri
 }

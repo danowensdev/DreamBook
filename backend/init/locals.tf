@@ -1,8 +1,8 @@
 locals {
   billing_account = "01F21A-6DB229-1099DA"
   project_name    = "danowensdev-state-1"
-  region          = "europe-west4"
-  zone            = "europe-west4-a"
+  region          = "europe-west1"
+  zone            = "europe-west1-d"
 
   services_to_enable = [
     "storage.googleapis.com",

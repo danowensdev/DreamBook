@@ -4,11 +4,12 @@ resource "random_integer" "default" {
 }
 
 locals {
-  state_bucket = "danowensdev-state-1-bucket"
-  billing_account = "01F21A-6DB229-1099DA"
-  project_name    = "dreambook-${random_integer.default.result}"
-  region          = "europe-west4"
-  zone            = "europe-west4-a"
+  state_bucket              = "danowensdev-state-1-bucket"
+  billing_account           = "01F21A-6DB229-1099DA"
+  project_name              = "dreambook-${random_integer.default.result}"
+  region                    = "europe-west1"
+  zone                      = "europe-west1-d"
+  terraform_service_account = "terraform-applier@dreambook-713.iam.gserviceaccount.com"
 
   services_to_enable = [
     "firebasestorage.googleapis.com",

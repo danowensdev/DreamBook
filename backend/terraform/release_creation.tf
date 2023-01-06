@@ -11,29 +11,29 @@ locals {
 
 # Create a service account for the agent to use to create releases
 resource "google_service_account" "release_creation" {
-    account_id = "release-creation"
-    display_name = "Release creation"
+  account_id   = "release-creation"
+  display_name = "Release creation"
 }
 
 # Give all required project roles to release creation SA
 resource "google_project_iam_member" "release_creation_sa_roles" {
   for_each = toset(local.release_creation_sa_roles)
-  project   = google_project.project.project_id
-  role      = each.value
-  member    = "serviceAccount:${google_service_account.release_creation.email}"
+  project  = google_project.project.project_id
+  role     = each.value
+  member   = "serviceAccount:${google_service_account.release_creation.email}"
 }
 
 # Create a bucket for cloud build to store logs and staging (so we can give permissions to it)
 resource "google_storage_bucket" "cloud_build" {
-  name          = "${local.project_name}-cloud-build"
-  location      = local.region
-  project       = google_project.project.project_id
+  name     = "${local.project_name}-cloud-build"
+  location = local.region
+  project  = google_project.project.project_id
 }
 
 # Give the release creation SA permission to access the cloud build bucket (for logging and staging)
 resource "google_storage_bucket_iam_binding" "cloud_build_bucket" {
-  bucket = google_storage_bucket.cloud_build.name
-  role   = "roles/storage.admin"
+  bucket  = google_storage_bucket.cloud_build.name
+  role    = "roles/storage.admin"
   members = ["serviceAccount:${google_service_account.release_creation.email}"]
 }
 
