@@ -4,6 +4,8 @@ import { LogoHeader } from "../LogoHeader/LogoHeader";
 
 import StarrySkyBackground from "../../assets/starrysky4x.jpeg";
 import { breakpoints } from "../theme";
+import { Button } from "../Button/Button";
+import { getAuth, signOut } from "firebase/auth";
 const averageBackgroundImageColor = "#728db8"; // Average color of StarrySkyBackground
 const PageContainerDiv = styled.div`
   display: flex;
@@ -12,7 +14,7 @@ const PageContainerDiv = styled.div`
   margin: 0 auto;
   overflow-y: auto;
   min-width: 300px;
-  padding: 24px;
+  padding: 16px;
   background-image: url(${StarrySkyBackground});
   background-size: cover;
   background-position: center;
@@ -20,7 +22,7 @@ const PageContainerDiv = styled.div`
   height: 100vh;
   @media (max-width: ${breakpoints.sm}) {
     width: 100%;
-    padding: 24px 0px;
+    padding: 16px 0px;
   }
 `;
 
@@ -38,13 +40,29 @@ const PageDiv = styled.div`
   width: 364px;
   padding: 24px;
   margin: 0 auto;
-  border-radius: 5px;`;
+  border-radius: 8px;`;
 
-export const PageContainer: React.FC = ({ children }) => {
+interface PageContainerProps {
+  loggedIn: boolean;
+}
+export const PageContainer: React.FC<PageContainerProps> = ({
+  children,
+  loggedIn,
+}) => {
   return (
     <PageContainerDiv>
       <LogoHeader />
       <PageDiv>{children}</PageDiv>
+
+      {loggedIn ? (
+        <Button
+          style={{ marginTop: "16px" }}
+          primary={false}
+          onClick={() => signOut(getAuth())}
+        >
+          Sign out
+        </Button>
+      ) : null}
     </PageContainerDiv>
   );
 };

@@ -1,9 +1,9 @@
 import { Navigate, Route, Routes } from "react-router-dom";
-import { useAuth } from "../../auth/useAuth";
-import { Dashboard } from "../Flow/Flow";
-import { Loading } from "../Loading/Loading";
-import { PageContainer } from "../PageContainer/PageContainer";
-import { WelcomePage } from "../WelcomePage/WelcomePage";
+import { useAuth } from "./auth/useAuth";
+import { CreationFlow } from "./creation-flow/CreationFlow";
+import { Loading } from "./components/Loading/Loading";
+import { PageContainer } from "./components/PageContainer/PageContainer";
+import { AuthPage } from "./auth/AuthPage";
 import "./App.css";
 export const App: React.FC = () => {
   const { user, loading } = useAuth();
@@ -13,15 +13,17 @@ export const App: React.FC = () => {
   if (loading) {
     uiElement = <Loading />;
   } else if (loggedIn) {
-    uiElement = <Dashboard />;
+    uiElement = <CreationFlow />;
   } else {
-    uiElement = <WelcomePage />;
+    uiElement = <AuthPage />;
   }
   return (
     <Routes>
       <Route
         path={"/"}
-        element={<PageContainer> {uiElement}</PageContainer>}
+        element={
+          <PageContainer loggedIn={loggedIn}> {uiElement}</PageContainer>
+        }
       ></Route>
       <Route path={"*"} element={<Navigate to={"/"} />} />
     </Routes>

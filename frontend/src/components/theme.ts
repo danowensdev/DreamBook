@@ -1,6 +1,8 @@
 export const theme = {
-  main: "#ffffff",
+  background: "#ffffff",
   disabled: "#ffffff33",
+  secondary: "#333333",
+  text: "#000000",
 };
 
 export const breakpoints = {

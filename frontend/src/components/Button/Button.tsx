@@ -25,7 +25,7 @@ export const Button = styled.button<ButtonProps>`
       &:disabled {
         background: ${theme.disabled};
       }
-      background: ${theme.main};
+      background: ${theme.background};
       color: #222222;
     `};
   ${(props) =>
@@ -36,7 +36,7 @@ export const Button = styled.button<ButtonProps>`
       }
       border: none;
       background: transparent;
-      color: ${theme.main};
+      color: ${theme.background};
     `};
 `;
 

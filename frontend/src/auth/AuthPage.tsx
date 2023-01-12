@@ -6,12 +6,12 @@ import {
 } from "firebase/auth";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { ReactComponent as GoogleLogo } from "../../assets/Google__G__Logo.svg";
-import { useAuth } from "../../auth/useAuth";
-import { googleAuthProvider } from "../../firebase";
-import { Button } from "../Button/Button";
-import { TextField } from "../TextField/TextField";
-import { breakpoints } from "../theme";
+import { ReactComponent as GoogleLogo } from "../assets/Google__G__Logo.svg";
+import { useAuth } from "./useAuth";
+import { googleAuthProvider } from "../firebase";
+import { Button } from "../components/Button/Button";
+import { TextField } from "../components/TextField/TextField";
+import { breakpoints } from "../components/theme";
 
 const GoogleIcon = styled(GoogleLogo)`
   background-color: white;
@@ -38,7 +38,7 @@ const AuthProviderButton = styled(Button)`
   }
 `;
 
-export const WelcomePage: React.FC = () => {
+export const AuthPage: React.FC = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const { error } = useAuth();

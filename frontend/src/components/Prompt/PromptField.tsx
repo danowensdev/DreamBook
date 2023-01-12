@@ -1,20 +1,27 @@
-import React, { InputHTMLAttributes } from "react";
 import styled from "styled-components";
 import { theme } from "../theme";
 
-interface TextFieldProps extends InputHTMLAttributes<HTMLInputElement> {}
+export const PromptField = styled.input`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  min-height: 36px;
+  padding: 8px 12px;
 
-export const TextField: React.FC<TextFieldProps> = styled.input`
-  background-color: transparent;
+  background: ${theme.background};
+  box-shadow: 0px 0px 4px 4px ${theme.background};
+  border-radius: 5px;
+  margin: 5px;
+  width: 100%;
+
   min-width: 40px;
-  color: ${theme.background};
+  color: ${theme.text};
 
   ::placeholder {
-    color: ${theme.background};
+    color: ${theme.secondary};
     opacity: 0.7; /* Firefox */
   }
-  padding: 12px;
-  line-height: 1;
+
   border: none;
   &&:hover {
     border: none;
