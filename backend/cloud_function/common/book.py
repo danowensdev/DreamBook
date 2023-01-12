@@ -1,5 +1,5 @@
 from datetime import datetime
-from firebase import db
+from common.firebase import db
 
 project_id: str = "dreambook-713"
 topic_id: str = "open-job-topic"

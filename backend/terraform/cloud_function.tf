@@ -40,7 +40,7 @@ resource "google_cloudfunctions2_function" "request_handler" {
   description = "Request handler"
 
   build_config {
-    entry_point = "request_handler"
+    entry_point = "handle_post_book_request"
     runtime     = "python39"
     source {
       storage_source {
