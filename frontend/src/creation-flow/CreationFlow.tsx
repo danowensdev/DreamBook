@@ -1,24 +1,17 @@
-import { User, getAuth, signOut } from "firebase/auth";
+import { User } from "firebase/auth";
 import React from "react";
 import styled from "styled-components";
 import { v4 as uuidv4 } from "uuid";
 
 import { useAuth } from "../auth/useAuth";
-import { Button } from "../components/Button/Button";
-import { breakpoints } from "../components/theme";
-import { TextField } from "../components/TextField/TextField";
-import { PromptField } from "../components/Prompt/PromptField";
-import { PageImage } from "../components/BookPage/Image/Image";
 import { BookPage } from "../components/BookPage/BookPage";
 import { Prompt } from "../components/Prompt/Prompt";
-
-const cloudFunctionUrl =
-  "https://dreambook-request-handler3-rict3hrzrq-ez.a.run.app";
+import { config } from "../config";
 
 async function submitPrompt(prompt: string, user: User, request_id: string) {
   const token = await user.getIdToken();
 
-  const response = await fetch(cloudFunctionUrl, {
+  const response = await fetch(config.cloudFunctionUrl, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -30,7 +23,7 @@ async function submitPrompt(prompt: string, user: User, request_id: string) {
     }),
   });
 
-  if (response.status === 200) {
+  if (response.status === 201) {
     console.log("Prompt submitted");
   } else {
     console.error("Error submitting prompt");
