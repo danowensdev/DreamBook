@@ -1,3 +1,5 @@
 google-cloud-pubsub
 flask
 firebase-admin
+openai
+flask-cors
