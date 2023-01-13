@@ -12,17 +12,24 @@ bucket_name = "dreambook-output-storage"
 
 inference = StableDiffusionInference()
 
+
 # TODO: Class for message payload
-def handle_message(message: pubsub_v1.subscriber.message.Message) -> None:
+def handle_message(message: pubsub_v1.types.message) -> None:
     print(f"Received {message}.")
-    
+    attributes = message.attributes
+    book_id = attributes["book_id"]
+    page_id = attributes["page_id"]
+    user_id = attributes["user_id"]
+
+    prompt = message.data.decode("utf-8")
+
     # Put current date and time in the filename
     file_path = "dreambook-" + datetime.now().strftime("%Y%m%d-%H%M%S") + ".png"
-    
-    inference.run("a photo of an astronaut riding a horse on mars", output_path=file_path)
+
+    inference.run(prompt, output_path=file_path)
 
     url = upload_file_to_bucket(file_path)
-    finish_job(url)
+    finish_job(url, user_id, book_id, page_id)
 
     message.ack()
 
@@ -32,24 +39,29 @@ def upload_file_to_bucket(file_path: str) -> str:
     # TODO: Don't save file, upload directly from result
     blob = bucket.blob(file_path)
     blob.upload_from_filename(file_path)
-  
+
     print(f"Uploaded {file_path} to bucket.")
 
     return blob.public_url
-    
+
 
 def check_for_messages():
-  subscriber = pubsub_v1.SubscriberClient()
-  subscription = subscriber.subscription_path(project_id, subscription_id)
+    subscriber = pubsub_v1.SubscriberClient()
+    subscription = subscriber.subscription_path(project_id, subscription_id)
 
-  print(f"Listening for messages on {subscription}...")
-  future = subscriber.subscribe(subscription, callback=handle_message, flow_control=pubsub_v1.types.FlowControl(max_messages=1))
-  future.result() # Await on the future to block the main thread.
+    print(f"Listening for messages on {subscription}...")
+    future = subscriber.subscribe(
+        subscription,
+        callback=handle_message,
+        flow_control=pubsub_v1.types.FlowControl(max_messages=1),
+    )
+    future.result()  # Await on the future to block the main thread.
 
 
 def main():
     print("Starting up the worker...")
     check_for_messages()
+
 
 if __name__ == "__main__":
     main()

@@ -49,8 +49,6 @@ export const CreationFlow: React.FC = () => {
     return null;
   }
 
-  const [prompt, setPrompt] = React.useState<string>("");
-
   return (
     <FlowPage>
       <BookPage
@@ -62,7 +60,7 @@ export const CreationFlow: React.FC = () => {
           "https://storage.googleapis.com/pai-images/5f11c49f54984d31b9e0bba8e2cd413c.jpeg"
         }
       />
-      <Prompt onSubmit={() => submitPrompt(prompt, user, uuidv4())} />
+      <Prompt onSubmit={(prompt) => submitPrompt(prompt, user, uuidv4())} />
     </FlowPage>
   );
 };

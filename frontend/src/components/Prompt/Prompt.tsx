@@ -18,6 +18,7 @@ export const Prompt: React.FC<PromptProps> = ({ onSubmit }) => {
 
   return (
     <PromptForm
+      noValidate
       onSubmit={(e) => {
         e.preventDefault();
       }}
@@ -27,7 +28,7 @@ export const Prompt: React.FC<PromptProps> = ({ onSubmit }) => {
         placeholder="Enter an inspiration..."
         onChange={(e) => setPrompt(e.target.value)}
       />
-      <Button primary={true} onClick={() => onSubmit(prompt)}>
+      <Button primary={true} autoFocus onClick={() => onSubmit(prompt)}>
         Submit
       </Button>
     </PromptForm>

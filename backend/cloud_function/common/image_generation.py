@@ -11,6 +11,9 @@ def queue_image_generation(
     Schedule a job to generate an image for the given prompt, to be stored
     as an image option for the given user, book, and page.
     """
+
+    print("Queueing image generation for prompt: " + prompt)
+
     publisher = pubsub_v1.PublisherClient()
     topic_path = publisher.topic_path(project_id, topic_id)
 
