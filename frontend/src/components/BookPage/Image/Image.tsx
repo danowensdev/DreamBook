@@ -5,11 +5,10 @@ const imageSizePx = 400;
 
 export const PageImage = styled.img`
   width: ${imageSizePx}px;
-  height: ${imageSizePx}px;
   border-radius: 8px;
 
   max-width: 100%;
-  max-height: 100%;
+  height: auto;
 `;
 
 /*
