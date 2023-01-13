@@ -12,9 +12,13 @@ def post_books(request: Request, user_id: str, headers: dict):
     """
     rnd = Random()
 
-    body = request.get_json()
-    prompt = body.get("prompt")
-    request_id = body.get("request_id")
+    try:
+        body = request.get_json()
+        prompt = body.get("prompt")
+        request_id = body.get("request_id")
+    except ValueError as err:
+        print("POST /books: Invalid request body: " + str(err))
+        return make_response("{}", 400, headers)
 
     # Deterministic UUIDs based on request ID, for idempotency
     rnd.seed(request_id)

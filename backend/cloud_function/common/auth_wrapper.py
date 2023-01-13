@@ -25,7 +25,13 @@ def wrap_request_with_cors_and_auth(
     headers = {"Access-Control-Allow-Origin": "*"}
 
     # Authenticate request with Firebase
-    bearer_token = request.headers.get("Authorization").split(" ").pop()
-    user_id = authenticate_request_and_decode_user_id(bearer_token)
+    try:
+        bearer_token = request.headers.get("Authorization").split(" ").pop()
+        user_id = authenticate_request_and_decode_user_id(bearer_token)
+    except Exception as err:
+        print(
+            "Failed to authenticate request: " + str(err) + str(err.__class__.__name__)
+        )
+        return ("{}", 401, headers)
 
     return handler(request, user_id, headers)
