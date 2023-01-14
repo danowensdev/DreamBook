@@ -11,7 +11,10 @@ dependencies:
   - numpy=1.19.2
   - pip:
       - google-cloud-secret-manager
+      - google-cloud-storage
       - google-cloud-pubsub
+      - firebase-admin
+      - accelerate
       - albumentations==0.4.3
       - diffusers
       - opencv-python==4.1.2.30
@@ -27,7 +30,6 @@ dependencies:
       - torch-fidelity==0.3.0
       - transformers==4.19.2
       - torchmetrics==0.6.0
-      - accelerate
       - kornia==0.6
       - -e git+https://github.com/CompVis/taming-transformers.git@master#egg=taming-transformers
       - -e git+https://github.com/openai/CLIP.git@main#egg=clip

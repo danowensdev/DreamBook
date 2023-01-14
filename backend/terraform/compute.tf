@@ -77,8 +77,9 @@ resource "google_compute_instance_template" "dreambook" {
     #source_image      = "projects/ml-images/global/images/family/common-dl-gpu-debian-10"
     source_image = module.gce-container.source_image
 
-    auto_delete = true
-    boot        = true
+    auto_delete  = true
+    boot         = true
+    disk_size_gb = 32
     // TODO: Backup
   }
 
