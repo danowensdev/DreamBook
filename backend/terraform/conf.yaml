@@ -1,0 +1,44 @@
+#cloud-config
+
+users:
+  - name: myuser
+    uid: 2000
+
+write_files:
+  - path: /etc/systemd/system/install-gpu.service
+    permissions: 0644
+    owner: root
+    content: |
+      [Unit]
+      Description=Install GPU drivers
+      Wants=gcr-online.target docker.socket
+      After=gcr-online.target docker.socket
+
+      [Service]
+      User=root
+      Type=oneshot
+      ExecStart=cos-extensions install gpu
+      StandardOutput=journal+console
+      StandardError=journal+console
+  - path: /etc/systemd/system/myapp.service
+    permissions: 0644
+    owner: root
+    content: |
+      [Unit]
+      Description=Run a myapp GPU application container
+      Requires=install-gpu.service
+      After=install-gpu.service
+
+      [Service]
+      User=root
+      Type=oneshot
+      RemainAfterExit=true
+      ExecStart=/usr/bin/docker run -u 2000 --name=myapp --volume /var/lib/nvidia/lib64:/usr/local/nvidia/lib64 --volume /var/lib/nvidia/bin:/usr/local/nvidia/bin --device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidiactl:/dev/nvidiactl eu.gcr.io/dreambook-713/dreambook:latest
+      StandardOutput=journal+console
+      StandardError=journal+console
+
+runcmd:
+  - systemctl daemon-reload
+  - systemctl start install-gpu.service
+  - systemctl start myapp.service
+# TODO: Use specific image version, not latest

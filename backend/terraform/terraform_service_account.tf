@@ -3,6 +3,7 @@
 
 locals {
   roles = [
+    "roles/pubsub.admin",
     "roles/firebase.admin",
     "roles/storage.admin",
     "roles/viewer",
@@ -36,7 +37,7 @@ resource "google_project_iam_member" "token_creator_admin_terraform_sa" {
 }
 
 
-# Grant each role to the service account
+# Grant each terraform applier role to the service account
 resource "google_project_iam_member" "terraform_applier_roles" {
   project  = google_project.project.project_id
   member   = "serviceAccount:${google_service_account.terraform_applier.email}"

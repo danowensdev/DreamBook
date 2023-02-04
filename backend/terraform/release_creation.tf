@@ -1,6 +1,7 @@
 locals {
   repository = "danowensdev/DreamBook"
   release_creation_sa_roles = [
+    "roles/pubsub.admin",
     "roles/firebase.admin",
     "roles/storage.admin",
     "roles/viewer",

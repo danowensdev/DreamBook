@@ -50,6 +50,14 @@ module "gce-container" {
   restart_policy = "Always" // TODO: Check
 }
 
+data "cloudinit_config" "conf" {
+  gzip          = false
+  base64_encode = false
+  part {
+    content  = file("conf.yaml")
+    filename = "conf.yaml"
+  }
+}
 resource "google_compute_instance_template" "dreambook" {
   name_prefix          = "dreambook-${substr(var.worker_image_tag, 0, 5)}-"
   description          = "This template is used to create dreambook backend instances."
@@ -86,6 +94,8 @@ resource "google_compute_instance_template" "dreambook" {
   metadata = {
     gce-container-declaration = module.gce-container.metadata_value
     google-logging-enabled    = "true"
+    google-monitoring-enabled = "true"
+    user-data                 = "${data.cloudinit_config.conf.rendered}"
   }
   labels = {
     container-vm = module.gce-container.vm_container_label
@@ -101,7 +111,11 @@ resource "google_compute_instance_template" "dreambook" {
   lifecycle {
     create_before_destroy = true # https://github.com/hashicorp/terraform-provider-google/issues/1601
   }
+
+  metadata_startup_script = templatefile("./startup.sh", {})
+
 }
+
 
 resource "google_compute_target_pool" "dreambook" {
   name   = "dreambook-pool"
@@ -149,6 +163,16 @@ resource "google_compute_autoscaler" "foobar" {
 
   }
 }
+
+# Allow default GCE SA to access huggingface-cli password  data.google_compute_default_service_account.default.email
+resource "google_secret_manager_secret_iam_member" "gce-huggingface-cli-pw" {
+  project   = google_secret_manager_secret.huggingface-cli-pw.project
+  secret_id = google_secret_manager_secret.huggingface-cli-pw.secret_id
+  role      = "roles/secretmanager.secretAccessor"
+  member    = "serviceAccount:${data.google_compute_default_service_account.default.email}"
+}
+
+
 output "image_tag" {
   value = var.worker_image_tag
 }
