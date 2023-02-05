@@ -1,3 +1,4 @@
+# TODO: Don't need these roles since we impersonate terraform applier SA
 locals {
   repository = "danowensdev/DreamBook"
   release_creation_sa_roles = [
@@ -64,6 +65,13 @@ resource "google_storage_bucket_iam_member" "state_bucket_write_access" {
   bucket = local.state_bucket
   role   = "roles/storage.admin"
   member = "serviceAccount:${google_service_account.release_creation.email}"
+}
+
+# Give release creation SA permission to impersonate terraform applier SA
+resource "google_service_account_iam_member" "impersonate_terraform_applier" {
+  service_account_id = google_service_account.release_creation.name
+  role               = "roles/iam.serviceAccountTokenCreator"
+  member             = "serviceAccount:${google_service_account.terraform_applier.email}"
 }
 
 
