@@ -9,5 +9,5 @@ steps:
     args:
       - --destination=eu.gcr.io/$PROJECT_ID/dreambook:$COMMIT_SHA
       - --cache=true
-      - --cache-ttl=24h
+      - --cache-ttl=240h
       - --compressed-caching=false

@@ -64,7 +64,7 @@ resource "google_compute_instance_template" "dreambook" {
   instance_description = "Dreambook backend instance"
   project              = google_project.project.project_id
 
-  machine_type = "custom-2-13312"
+  machine_type = "n1-highmem-2"
 
   can_ip_forward = false
 
@@ -92,27 +92,29 @@ resource "google_compute_instance_template" "dreambook" {
   }
 
   metadata = {
-    gce-container-declaration = module.gce-container.metadata_value
+    //gce-container-declaration = module.gce-container.metadata_value
     google-logging-enabled    = "true"
     google-monitoring-enabled = "true"
     user-data                 = "${data.cloudinit_config.conf.rendered}"
   }
-  labels = {
-    container-vm = module.gce-container.vm_container_label
-  }
+  //labels = {
+  //container-vm = module.gce-container.vm_container_label
+  //}
 
   network_interface {
     network    = google_compute_network.dreambook.name
     subnetwork = google_compute_subnetwork.dreambook.name
   }
   service_account { // TODO
-    scopes = ["cloud-platform"]
+    scopes = ["cloud-platform",
+      "https://www.googleapis.com/auth/compute.readonly",
+    "https://www.googleapis.com/auth/devstorage.read_only"]
   }
   lifecycle {
     create_before_destroy = true # https://github.com/hashicorp/terraform-provider-google/issues/1601
   }
 
-  metadata_startup_script = templatefile("./startup.sh", {})
+  #metadata_startup_script = templatefile("./startup.sh", {})
 
 }
 

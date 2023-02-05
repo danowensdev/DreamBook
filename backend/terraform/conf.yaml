@@ -30,10 +30,12 @@ write_files:
       After=install-gpu.service
 
       [Service]
+      Environment="HOME=/home/cloudservice"
       User=root
       Type=oneshot
       RemainAfterExit=true
-      ExecStart=/usr/bin/docker run -u 2000 --name=myapp --volume /var/lib/nvidia/lib64:/usr/local/nvidia/lib64 --volume /var/lib/nvidia/bin:/usr/local/nvidia/bin --device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidiactl:/dev/nvidiactl eu.gcr.io/dreambook-713/dreambook:latest
+      ExecStartPre=/usr/bin/docker-credential-gcr configure-docker
+      ExecStart=/usr/bin/docker run -u 2000 --name=myapp --volume /var/lib/nvidia/lib64:/usr/local/nvidia/lib64 --volume /var/lib/nvidia/bin:/usr/local/nvidia/bin --device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidiactl:/dev/nvidiactl eu.gcr.io/dreambook-713/dreambook:a162dde6a5ea9614b509000c5ba66ffa5cc1fe38
       StandardOutput=journal+console
       StandardError=journal+console
 

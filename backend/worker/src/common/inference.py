@@ -1,3 +1,4 @@
+import os
 from torch import autocast, cuda, float16
 from PIL import Image
 from diffusers import StableDiffusionPipeline
@@ -16,6 +17,7 @@ class StableDiffusionInference:
         self.pipeline = StableDiffusionPipeline.from_pretrained(
             "runwayml/stable-diffusion-v1-5",
             torch_dtype=torch_dtype,
+            cache_dir="./cache",
             device_map="auto",  # https://github.com/huggingface/diffusers/issues/968
             use_auth_token=huggingface_token,
         ).to(self.device)

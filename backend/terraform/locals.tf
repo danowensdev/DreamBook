@@ -8,7 +8,7 @@ locals {
   billing_account           = "01F21A-6DB229-1099DA"
   project_name              = "dreambook-${random_integer.default.result}"
   region                    = "europe-west1"
-  zone                      = "europe-west1-d"
+  zone                      = "europe-west1-c"
   terraform_service_account = "terraform-applier@dreambook-713.iam.gserviceaccount.com"
 
   services_to_enable = [
