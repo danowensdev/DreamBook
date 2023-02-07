@@ -9,10 +9,11 @@ locals {
     "roles/viewer",
     "roles/iam.workloadIdentityPoolViewer",
 
-    "roles/compute.admin",            # For creating, editing and deleting instances and networks
-    "roles/cloudbuild.builds.editor", # For creating builds
-    "roles/artifactregistry.admin",   # For pushing to artifact registry
-    "roles/storage.objectViewer",     # For logging
+    "roles/compute.admin",                 # For creating, editing and deleting instances and networks
+    "roles/cloudbuild.builds.editor",      # For creating builds
+    "roles/artifactregistry.admin",        # For pushing to artifact registry
+    "roles/storage.objectViewer",          # For logging
+    "roles/iam.serviceAccountTokenCreator" # Needed so that the the OIDC connection can create a token from the json key.
   ]
 }
 

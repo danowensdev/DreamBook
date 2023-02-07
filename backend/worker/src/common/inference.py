@@ -1,4 +1,3 @@
-import os
 from torch import autocast, cuda, float16
 from PIL import Image
 from diffusers import StableDiffusionPipeline
