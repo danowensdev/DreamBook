@@ -6,5 +6,5 @@ resource "google_pubsub_subscription" "default" {
   topic                      = google_pubsub_topic.default.name
   ack_deadline_seconds       = 300
   retain_acked_messages      = false
-  message_retention_duration = "600s"
+  message_retention_duration = "1000s"
 }

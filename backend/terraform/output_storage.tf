@@ -3,6 +3,7 @@ resource "google_storage_bucket" "output_storage" {
   location = local.region
   project  = google_project.project.project_id
 }
+
 resource "google_firebase_storage_bucket" "bucket" {
   provider  = google-beta
   project   = google_project.project.project_id

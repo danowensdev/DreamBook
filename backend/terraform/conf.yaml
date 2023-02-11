@@ -13,15 +13,15 @@ write_files:
       [Service]
       User=root
       Type=oneshot
-      ExecStart=cos-extensions install gpu
+      ExecStart=cos-extensions install gpu && sudo mount --bind /var/lib/nvidia /var/lib/nvidia && sudo mount -o remount,exec /var/lib/nvidia
       StandardOutput=journal+console
       StandardError=journal+console
-  - path: /etc/systemd/system/myapp.service
+  - path: /etc/systemd/system/dreambook.service
     permissions: 0644
     owner: root
     content: |
       [Unit]
-      Description=Run a myapp GPU application container
+      Description=Run a dreambook GPU application container
       Requires=install-gpu.service
       After=install-gpu.service
 
@@ -31,12 +31,12 @@ write_files:
       Type=oneshot
       RemainAfterExit=true
       ExecStartPre=/usr/bin/docker-credential-gcr configure-docker
-      ExecStart=/usr/bin/docker run --name=myapp --volume /var/lib/nvidia/lib64:/usr/local/nvidia/lib64 --volume /var/lib/nvidia/bin:/usr/local/nvidia/bin --device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidiactl:/dev/nvidiactl eu.gcr.io/dreambook-713/dreambook:latest
+      ExecStart=/usr/bin/docker run --name=dreambook --volume /var/lib/nvidia/lib64:/usr/local/nvidia/lib64 --volume /var/lib/nvidia/bin:/usr/local/nvidia/bin --device /dev/nvidia0:/dev/nvidia0 --device /dev/nvidia-uvm:/dev/nvidia-uvm --device /dev/nvidiactl:/dev/nvidiactl eu.gcr.io/dreambook-713/dreambook:latest
       StandardOutput=journal+console
       StandardError=journal+console
 
 runcmd:
   - systemctl daemon-reload
   - systemctl start install-gpu.service
-  - systemctl start myapp.service
+  - systemctl start dreambook.service
 # TODO: Use specific image version, not latest
